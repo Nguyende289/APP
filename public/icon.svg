@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background Shield -->
+  <path d="M256 32C256 32 64 64 64 192C64 328 256 480 256 480C256 480 448 328 448 192C448 64 256 32 256 32Z" fill="#b91c1c" stroke="#fcd116" stroke-width="16"/>
+  
+  <!-- Inner Shield Detail -->
+  <path d="M256 60C256 60 90 88 90 192C90 308 256 440 256 440C256 440 422 308 422 192C422 88 256 60 256 60Z" fill="none" stroke="#fcd116" stroke-width="4" opacity="0.5"/>
+
+  <!-- Gold Star -->
+  <polygon points="256,120 296,220 406,220 316,290 350,400 256,340 162,400 196,290 106,220 216,220" fill="#fcd116" stroke="#b45309" stroke-width="2"/>
+  
+  <!-- Text: CA (Cong An) - Optional stylized text below star if needed, currently kept clean with just Star -->
+</svg>

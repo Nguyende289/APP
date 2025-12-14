@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Police Management App</title>
+    
+    <!-- PWA Settings -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#1e3a8a">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="CSTT App">
+    
+    <!-- Updated Icons to SVG -->
+    <link rel="icon" type="image/svg+xml" href="/icon.svg">
+    <link rel="apple-touch-icon" href="/icon.svg">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'], // Set Inter as default sans-serif font
+            },
+            boxShadow: {
+              'sm': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+              'md': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+              'lg': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+              'xl': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+              '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+            },
+            borderRadius: {
+              'lg': '0.5rem',   // 8px
+              'xl': '0.75rem',  // 12px
+              '2xl': '1rem',    // 16px
+              '3xl': '1.5rem',  // 24px
+            },
+          }
+        },
+        darkMode: 'class', // Enable dark mode with 'class' strategy
+      }
+    </script>
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        overscroll-behavior-y: none; /* Prevent pull-to-refresh on mobile PWA */
+      }
+      /* Custom styles for print view to ensure readability */
+      @media print {
+        @page {
+          size: A4;
+          margin: 2cm 2cm 2cm 3cm; /* Updated margins: Top 2cm, Right 2cm, Bottom 2cm, Left 3cm */
+        }
+        body {
+          font-family: 'Times New Roman', serif;
+          font-size: 12pt;
+          line-height: 1.35; /* Standard line-height as per Nghị định 30/2020/NĐ-CP */
+        }
+        .report-container {
+          width: 21cm; /* A4 width */
+          min-height: 29.7cm; /* A4 height */
+          margin: 0 auto;
+          padding: 2cm; /* Standard margins */
+          box-shadow: none; /* Remove shadow for print */
+        }
+        .no-print {
+          display: none !important;
+        }
+        h1, h2, h3, h4, h5, h6 {
+          page-break-after: avoid;
+        }
+        p, ul, ol, table {
+          page-break-inside: avoid;
+        }
+        table {
+          width: 100%;
+          border-collapse: collapse;
+        }
+        th, td {
+          border: 1px solid #000;
+          padding: 8px;
+          text-align: left;
+        }
+      }
+
+      /* Styles for contentEditable report preview to ensure consistent formatting */
+      .report-editable-content,
+      .report-editable-content p,
+      .report-editable-content div,
+      .report-editable-content span,
+      .report-editable-content ul,
+      .report-editable-content ol,
+      .report-editable-content li,
+      .report-editable-content table,
+      .report-editable-content th,
+      .report-editable-content td {
+          font-family: 'Times New Roman', serif !important;
+          font-size: 12pt !important;
+          line-height: 1.35 !important;
+          white-space: normal !important; /* Allow normal wrapping */
+          /* Reset other common contentEditable issues */
+          margin: 0 !important;
+          padding: 0 !important;
+          border: none !important;
+          color: inherit !important; /* Ensure text color is inherited */
+      }
+      /* Specific text alignment and indent for paragraphs */
+      .report-editable-content p:not([style*="text-align"]):not(.no-indent) {
+          text-align: justify !important;
+          text-indent: 40px !important;
+      }
+      .report-editable-content p.no-indent { /* For paragraphs that should not be indented */
+          text-indent: 0 !important;
+      }
+      .report-editable-content table.doc-header-table td {
+          border: none !important;
+          padding: 0 !important;
+      }
+      .report-editable-content table.doc-header-table td p {
+          white-space: nowrap !important; /* Preserve nowrap for header lines */
+          text-align: center !important;
+          font-weight: bold !important;
+          font-size: 13pt !important;
+      }
+      .report-editable-content table.doc-header-table td:first-child p:nth-child(3),
+      .report-editable-content table.doc-header-table td:last-child p:nth-child(3) {
+          font-size: 12pt !important;
+          font-weight: normal !important;
+      }
+      .report-editable-content table.doc-header-table td:last-child p:nth-child(3) { text-align: right !important;}
+
+      /* Ensure correct styles for signature block within editable content */
+      .report-editable-content .signature-title,
+      .report-editable-content .signature-text,
+      .report-editable-content .signature-name {
+          text-align: center !important;
+          margin: 0.6em auto !important;
+      }
+      .report-editable-content p.signature-name { margin-top: 1.5cm !important; }
+
+      .report-editable-content h1 { font-size: 14pt !important; text-align: center !important; font-weight: bold !important; text-transform: uppercase !important; margin-top: 1cm !important; margin-bottom: 0.6em !important; }
+      .report-editable-content h2 { font-size: 12pt !important; text-align: center !important; font-weight: bold !important; margin-bottom: 1cm !important; }
+    </style>
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <!-- Google API Client -->
+    <script src="https://apis.google.com/js/api.js" async defer></script>
+<script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.2.1/",
+    "react": "https://aistudiocdn.com/react@^19.2.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
+    "react-router-dom": "https://aistudiocdn.com/react-router-dom@^7.10.1",
+    "recharts": "https://aistudiocdn.com/recharts@^3.5.1",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.32.0",
+    "firebase/app": "https://esm.sh/firebase@10.13.1/app",
+    "firebase/firestore": "https://esm.sh/firebase@10.13.1/firestore",
+    "firebase/": "https://esm.sh/firebase@^12.6.0/",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
+    "vite": "https://esm.sh/vite@^7.2.7",
+    "vite-plugin-singlefile": "https://esm.sh/vite-plugin-singlefile@^2.3.0",
+    "vite-plugin-pwa": "https://esm.sh/vite-plugin-pwa@^1.2.0"
+  }
+}
+</script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+</body>
+</html>

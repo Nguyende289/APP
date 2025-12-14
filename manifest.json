@@ -1,0 +1,21 @@
+
+{
+  "short_name": "CSTT App",
+  "name": "Hệ thống Quản lý CSTT",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#1e3a8a",
+  "background_color": "#f3f4f6"
+}
